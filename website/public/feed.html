@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plush Recordings releases and news feed. Atmospheric, ambient, breakbeat-oriented music label est. 2009.">
+    <title>Plush Recordings - Releases &amp; News</title>
+    <link rel="icon" type="image/png" href="favicon/favicon.png">
+    <link rel="alternate" type="application/rss+xml" title="Plush Recordings - Releases &amp; News" href="https://about.plushrecs.com/feed.xml">
+    <style>
+        :root {
+            --bg: #000000;
+            --bg-elev: #0b0b0b;
+            --fg: #e3e3e3;
+            --muted: #5d5d5d;
+            --muted-2: #999999;
+            --line: #1a1a1a;
+            --accent: #11ccff;
+            --accent-hover: #0099cc;
+            --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            --body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0 40px;
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--body);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { color: var(--accent-hover); }
+        header {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 48px 0 24px;
+        }
+        header .wordmark {
+            font-family: var(--mono);
+            font-size: 1.05em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--fg);
+        }
+        header .wordmark a { color: var(--fg); }
+        header .wordmark a:hover { color: var(--accent); }
+        header h1 {
+            font-family: var(--mono);
+            font-size: 1.6em;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin: 18px 0 4px;
+        }
+        header .tagline {
+            color: var(--muted-2);
+            font-size: 0.95em;
+            margin: 0;
+        }
+        header .feedlink {
+            font-family: var(--mono);
+            font-size: 0.8em;
+            color: var(--muted);
+            margin-top: 10px;
+        }
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding-bottom: 40px;
+        }
+        .state {
+            font-family: var(--mono);
+            color: var(--muted-2);
+            border: 2px solid var(--line);
+            padding: 24px;
+            margin: 24px 0;
+        }
+        .item {
+            display: flex;
+            gap: 20px;
+            border-top: 2px solid var(--line);
+            padding: 24px 0;
+        }
+        .item:last-child { border-bottom: 2px solid var(--line); }
+        .cover {
+            flex: 0 0 96px;
+            width: 96px;
+            height: 96px;
+            background: var(--bg-elev);
+            border: 2px solid var(--line);
+        }
+        .cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            image-rendering: auto;
+        }
+        .cover.blank {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 0.7em;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+        }
+        .meta { min-width: 0; }
+        .item h2 {
+            font-family: var(--mono);
+            font-size: 1em;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin: 0 0 6px;
+            overflow-wrap: anywhere;
+        }
+        .item h2 a { color: var(--fg); }
+        .item h2 a:hover { color: var(--accent); }
+        .date {
+            font-family: var(--mono);
+            font-size: 0.78em;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .tags { margin: 6px 0 0; }
+        .tag {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 0.72em;
+            color: var(--muted-2);
+            border: 1px solid var(--line);
+            padding: 1px 7px;
+            margin: 0 6px 4px 0;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .desc {
+            color: var(--muted-2);
+            font-size: 0.9em;
+            margin: 8px 0 0;
+        }
+        .listen {
+            font-family: var(--mono);
+            font-size: 0.82em;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 24px 0 48px;
+            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 0.8em;
+        }
+        footer a { color: var(--muted-2); }
+        footer a:hover { color: var(--accent); }
+        @media (max-width: 520px) {
+            body { padding: 0 20px; }
+            .item { gap: 14px; }
+            .cover { flex-basis: 72px; width: 72px; height: 72px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="wordmark"><a href="https://plushrecs.com/">Plush Recordings</a></div>
+        <h1>Releases &amp; News</h1>
+        <p class="tagline">Deep rhythms, long horizons. Jungle and drum &amp; bass since 2009.</p>
+        <p class="feedlink">rss: <a href="/feed.xml">/feed.xml</a></p>
+    </header>
+    <main>
+        <div id="status" class="state">Loading the feed&hellip;</div>
+        <div id="items"></div>
+    </main>
+    <footer>
+        <a href="https://plushrecs.com/" target="_blank" rel="noopener noreferrer">plushrecs.com</a> |
+        <a href="https://plush.bandcamp.com" target="_blank" rel="noopener noreferrer">Bandcamp</a> |
+        <a href="https://www.youtube.com/plushdnb" target="_blank" rel="noopener noreferrer">YouTube</a> |
+        <a href="https://soundcloud.com/plushrecordings" target="_blank" rel="noopener noreferrer">SoundCloud</a> |
+        <a href="/feed.xml">RSS</a>
+    </footer>
+    <script>
+    (function () {
+        "use strict";
+        var statusEl = document.getElementById("status");
+        var itemsEl = document.getElementById("items");
+
+        function fail() {
+            statusEl.textContent =
+                "The feed didn't load. You can open /feed.xml directly.";
+        }
+
+        function text(node, tag) {
+            var el = node.getElementsByTagName(tag)[0];
+            return el && el.textContent ? el.textContent.trim() : "";
+        }
+
+        function fmtDate(rfc822) {
+            var d = new Date(rfc822);
+            if (isNaN(d.getTime())) return rfc822;
+            return d.toISOString().slice(0, 10);
+        }
+
+        function descriptionText(raw) {
+            // Item descriptions may carry a trailing "Listen" anchor. Parse in
+            // a detached document, drop anchors, keep the plain sentence. The
+            // detached document is never attached, so nothing executes.
+            var doc = new DOMParser().parseFromString(raw, "text/html");
+            var anchors = doc.body.querySelectorAll("a");
+            for (var i = 0; i < anchors.length; i++) {
+                anchors[i].parentNode.removeChild(anchors[i]);
+            }
+            return (doc.body.textContent || "").trim();
+        }
+
+        function render(items) {
+            if (!items.length) {
+                statusEl.textContent = "Nothing here yet. Check back soon.";
+                return;
+            }
+            statusEl.style.display = "none";
+            items.forEach(function (item) {
+                var row = document.createElement("article");
+                row.className = "item";
+
+                var cover = document.createElement("div");
+                var enclosure = item.getElementsByTagName("enclosure")[0];
+                var coverUrl = enclosure ? enclosure.getAttribute("url") : "";
+                if (coverUrl) {
+                    cover.className = "cover";
+                    var img = document.createElement("img");
+                    img.loading = "lazy";
+                    img.alt = "";
+                    img.src = coverUrl;
+                    img.onerror = function () {
+                        cover.className = "cover blank";
+                        cover.textContent = "PLUSH";
+                        if (img.parentNode) img.parentNode.removeChild(img);
+                    };
+                    cover.appendChild(img);
+                } else {
+                    cover.className = "cover blank";
+                    cover.textContent = "PLUSH";
+                }
+                row.appendChild(cover);
+
+                var meta = document.createElement("div");
+                meta.className = "meta";
+
+                var h2 = document.createElement("h2");
+                var link = text(item, "link");
+                if (link) {
+                    var a = document.createElement("a");
+                    a.href = link;
+                    a.target = "_blank";
+                    a.rel = "noopener noreferrer";
+                    a.textContent = text(item, "title");
+                    h2.appendChild(a);
+                } else {
+                    h2.textContent = text(item, "title");
+                }
+                meta.appendChild(h2);
+
+                var pubDate = text(item, "pubDate");
+                if (pubDate) {
+                    var date = document.createElement("div");
+                    date.className = "date";
+                    date.textContent = fmtDate(pubDate);
+                    meta.appendChild(date);
+                }
+
+                var cats = item.getElementsByTagName("category");
+                if (cats.length) {
+                    var tags = document.createElement("div");
+                    tags.className = "tags";
+                    for (var i = 0; i < cats.length; i++) {
+                        var tag = document.createElement("span");
+                        tag.className = "tag";
+                        tag.textContent = cats[i].textContent.trim();
+                        tags.appendChild(tag);
+                    }
+                    meta.appendChild(tags);
+                }
+
+                var descRaw = text(item, "description");
+                if (descRaw) {
+                    var desc = document.createElement("p");
+                    desc.className = "desc";
+                    desc.textContent = descriptionText(descRaw);
+                    meta.appendChild(desc);
+                }
+
+                if (link) {
+                    var listen = document.createElement("a");
+                    listen.className = "listen";
+                    listen.href = link;
+                    listen.target = "_blank";
+                    listen.rel = "noopener noreferrer";
+                    listen.textContent = "Listen →";
+                    meta.appendChild(listen);
+                }
+
+                row.appendChild(meta);
+                itemsEl.appendChild(row);
+            });
+        }
+
+        fetch("/feed.xml", { headers: { Accept: "application/rss+xml, application/xml, text/xml" } })
+            .then(function (res) {
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                return res.text();
+            })
+            .then(function (xml) {
+                var doc = new DOMParser().parseFromString(xml, "application/xml");
+                if (doc.getElementsByTagName("parsererror").length) {
+                    throw new Error("parse error");
+                }
+                render(Array.prototype.slice.call(doc.getElementsByTagName("item")));
+            })
+            .catch(fail);
+    })();
+    </script>
+</body>
+</html>
