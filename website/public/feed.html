@@ -150,6 +150,28 @@
             display: inline-block;
             margin-top: 10px;
         }
+        .embed { margin-top: 12px; }
+        .embed-load {
+            font-family: var(--mono);
+            font-size: 0.78em;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: transparent;
+            border: 1px solid var(--line);
+            padding: 9px 14px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        .embed-load:hover { border-color: var(--accent); color: var(--accent-hover); }
+        .embed iframe {
+            display: block;
+            width: 100%;
+            height: 120px;
+            border: 0;
+            background: var(--bg-elev);
+        }
         footer {
             max-width: 720px;
             margin: 0 auto;
@@ -218,6 +240,64 @@
             }
             return (doc.body.textContent || "").trim();
         }
+
+        var PLUSH_NS = "https://plushrecs.com/ns/feed";
+
+        function bandcampAlbum(node) {
+            // Read the namespaced <plush:bandcampAlbum> element (present only
+            // when the release resolved to a Bandcamp album id).
+            var el = null;
+            if (node.getElementsByTagNameNS) {
+                el = node.getElementsByTagNameNS(PLUSH_NS, "bandcampAlbum")[0];
+            }
+            if (!el) {
+                el = node.getElementsByTagName("plush:bandcampAlbum")[0];
+            }
+            var v = el && el.textContent ? el.textContent.trim() : "";
+            return /^[0-9]+$/.test(v) ? v : "";
+        }
+
+        function instantiateEmbed(container) {
+            // Swap the click-to-load button for the real Bandcamp iframe. Once
+            // only — guarded by data-loaded so both the click and the
+            // IntersectionObserver paths are idempotent.
+            if (container.getAttribute("data-loaded")) return;
+            container.setAttribute("data-loaded", "1");
+            var album = container.getAttribute("data-album");
+            var link = container.getAttribute("data-link");
+            var title = container.getAttribute("data-title");
+            var iframe = document.createElement("iframe");
+            iframe.setAttribute("seamless", "");
+            iframe.loading = "lazy";
+            // Dark branding: bgcol=void-elevated, linkcol=signal cyan (page
+            // accent), no artwork (the cover thumbnail already shows it).
+            iframe.src =
+                "https://bandcamp.com/EmbeddedPlayer/album=" + album +
+                "/size=large/bgcol=0b0b0b/linkcol=11ccff/tracklist=false" +
+                "/artwork=none/transparent=true/";
+            if (link) {
+                var a = document.createElement("a");
+                a.href = link;
+                a.textContent = title || "Listen on Bandcamp";
+                iframe.appendChild(a);
+            }
+            container.innerHTML = "";
+            container.appendChild(iframe);
+        }
+
+        // Lazy-load: instantiate an embed as it nears the viewport. Falls back
+        // to click-only when IntersectionObserver is unavailable. 30 eager
+        // Bandcamp iframes would crawl the page, so nothing loads until needed.
+        var embedObserver = ("IntersectionObserver" in window)
+            ? new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        instantiateEmbed(entry.target);
+                        embedObserver.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: "300px 0px" })
+            : null;
 
         function render(items) {
             if (!items.length) {
@@ -296,7 +376,27 @@
                     meta.appendChild(desc);
                 }
 
-                if (link) {
+                var album = bandcampAlbum(item);
+                if (album) {
+                    // Bandcamp embed (lazy). Click-to-load button until the
+                    // observer (or a tap) instantiates the iframe.
+                    var embed = document.createElement("div");
+                    embed.className = "embed";
+                    embed.setAttribute("data-album", album);
+                    embed.setAttribute("data-link", link || "");
+                    embed.setAttribute("data-title", text(item, "title"));
+                    var loadBtn = document.createElement("button");
+                    loadBtn.type = "button";
+                    loadBtn.className = "embed-load";
+                    loadBtn.textContent = "▶ Load Bandcamp player";
+                    loadBtn.addEventListener("click", function (ev) {
+                        instantiateEmbed(ev.currentTarget.parentNode);
+                    });
+                    embed.appendChild(loadBtn);
+                    meta.appendChild(embed);
+                    if (embedObserver) embedObserver.observe(embed);
+                } else if (link) {
+                    // No resolvable album id: keep the plain Listen link.
                     var listen = document.createElement("a");
                     listen.className = "listen";
                     listen.href = link;
