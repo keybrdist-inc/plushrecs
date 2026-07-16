@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:plush="https://plushrecs.com/ns/feed" version="2.0">
   <channel>
     <title>Plush Recordings - Releases &amp; News</title>
     <link>https://plushrecs.com/</link>
@@ -7,7 +7,7 @@
     <language>en-us</language>
     <atom:link href="https://about.plushrecs.com/feed.xml" rel="self" type="application/rss+xml" />
     <ttl>720</ttl>
-    <lastBuildDate>Thu, 16 Jul 2026 01:38:43 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 Jul 2026 01:53:59 +0000</lastBuildDate>
     <item>
       <title>LO! - Lose Control [PLUSH126]</title>
       <link>https://plush.bandcamp.com/album/lose-control</link>
@@ -16,6 +16,7 @@
       <category>Jungle</category>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH126/PLUSH126.jpg" length="1420029" type="image/jpeg" />
+      <plush:bandcampAlbum>3725795433</plush:bandcampAlbum>
       <description>Lose Control by LO!. Jungle, Drum &amp; Bass. Out 2026-06-24 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/lose-control"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -26,6 +27,7 @@
       <category>Drum &amp; Bass</category>
       <category>Atmospheric Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH125/PLUSH125.jpg" length="2072327" type="image/jpeg" />
+      <plush:bandcampAlbum>238237418</plush:bandcampAlbum>
       <description>A Friend by Thomas B. Drum &amp; Bass, Atmospheric Drum &amp; Bass. Out 2025-11-05 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/heat-dome-a-friend"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -45,6 +47,7 @@
       <category>Drum &amp; Bass</category>
       <category>Liquid Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH123/PLUSH123.jpg" length="10005286" type="image/jpeg" />
+      <plush:bandcampAlbum>2281449372</plush:bandcampAlbum>
       <description>Trial By Fire by Adred. Drum &amp; Bass, Liquid Drum &amp; Bass. Out 2025-08-28 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/katsh-ep"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -55,6 +58,7 @@
       <category>Drum &amp; Bass</category>
       <category>Atmospheric Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH122/PLUSH122.jpg" length="13532180" type="image/jpeg" />
+      <plush:bandcampAlbum>3275570203</plush:bandcampAlbum>
       <description>Liquid Oblivion by Exosphere. Drum &amp; Bass, Atmospheric Drum &amp; Bass. Out 2025-07-24 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/human-development-liquid-oblivion"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -65,6 +69,7 @@
       <category>Atmospheric Drum &amp; Bass</category>
       <category>Jungle</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH121/PLUSH121.jpg" length="2143732" type="image/jpeg" />
+      <plush:bandcampAlbum>3701481856</plush:bandcampAlbum>
       <description>Right 4 U by Ishe. Atmospheric Drum &amp; Bass, Jungle. Out 2025-05-30 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/circles-ep"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -75,6 +80,7 @@
       <category>Jungle</category>
       <category>Atmospheric Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH120/PLUSH120.jpg" length="1516422" type="image/jpeg" />
+      <plush:bandcampAlbum>2303377648</plush:bandcampAlbum>
       <description>Witchy &amp; Wobble / The Highest Point by DJ Airwalk. Jungle, Atmospheric Drum &amp; Bass. Out 2025-04-14 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/witchy-and-wobble-the-highest-point"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -93,6 +99,7 @@
       <pubDate>Wed, 07 Sep 2022 00:00:00 +0000</pubDate>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH118/PLUSH118.jpg" length="4074339" type="image/jpeg" />
+      <plush:bandcampAlbum>2111425747</plush:bandcampAlbum>
       <description>Echoes EP by Vybryda. Drum &amp; Bass. Out 2022-09-07 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/echoes-ep"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -103,6 +110,7 @@
       <category>Drum &amp; Bass</category>
       <category>Jungle</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH117/PLUSH117.jpg" length="4074339" type="image/jpeg" />
+      <plush:bandcampAlbum>1373290828</plush:bandcampAlbum>
       <description>Don't Want None / Furia by Recall. Drum &amp; Bass, Jungle. Out 2022-08-24 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/furia-dont-want-none"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -113,6 +121,7 @@
       <category>Leftfield Bass</category>
       <category>Jungle</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH116/PLUSH116.jpg" length="2397400" type="image/jpeg" />
+      <plush:bandcampAlbum>3303177909</plush:bandcampAlbum>
       <description>WWIII by Banzulu. Leftfield Bass, Jungle. Out 2020-06-15 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/wwiii"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -123,6 +132,7 @@
       <category>Drum &amp; Bass</category>
       <category>Footwork</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH115/PLUSH115.jpg" length="4156400" type="image/jpeg" />
+      <plush:bandcampAlbum>2282921493</plush:bandcampAlbum>
       <description>Natural Selection by Doctor Jeep feat. Sinistarr. Drum &amp; Bass, Footwork. Out 2018-12-03 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/natural-selection"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -132,6 +142,7 @@
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH114/PLUSH114.jpg" length="1354277" type="image/jpeg" />
+      <plush:bandcampAlbum>1154291385</plush:bandcampAlbum>
       <description>Labyrinth / Dambe by Jegbee. Drum &amp; Bass. Out 2018-10-08 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/labyrinth-dambe"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -141,6 +152,7 @@
       <pubDate>Thu, 19 Apr 2018 00:00:00 +0000</pubDate>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH113/PLUSH113.jpg" length="2155273" type="image/jpeg" />
+      <plush:bandcampAlbum>1510863473</plush:bandcampAlbum>
       <description>I Will / Random Burst by Kamuku. Drum &amp; Bass. Out 2018-04-19 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/i-will-random-burst"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -150,6 +162,7 @@
       <pubDate>Mon, 05 Feb 2018 00:00:00 +0000</pubDate>
       <category>Deep DNB</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH112/PLUSH112.jpg" length="583568" type="image/jpeg" />
+      <plush:bandcampAlbum>690870080</plush:bandcampAlbum>
       <description>When You Wake Up by robbyt. Deep DNB. Out 2018-02-05 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/when-you-wake-up"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -159,6 +172,7 @@
       <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
       <category>Halftime Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH111/PLUSH111.jpg" length="874495" type="image/jpeg" />
+      <plush:bandcampAlbum>2114098761</plush:bandcampAlbum>
       <description>Frog Marched by Samurai Breaks. Halftime Drum &amp; Bass. Out 2018-01-22 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/frog-marched"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -169,6 +183,7 @@
       <category>Liquid Drum &amp; Bass</category>
       <category>Dance</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH110/PLUSH110.jpg" length="644700" type="image/jpeg" />
+      <plush:bandcampAlbum>2583033772</plush:bandcampAlbum>
       <description>No Chance by Province feat. Sarah Zad. Liquid Drum &amp; Bass, Dance. Out 2018-01-01 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/no-chance"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -179,6 +194,7 @@
       <category>Techstep</category>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH109/PLUSH109.jpg" length="813369" type="image/jpeg" />
+      <plush:bandcampAlbum>1520248022</plush:bandcampAlbum>
       <description>Distorted Reality EP by Altered Perception. Techstep, Drum &amp; Bass. Out 2017-12-04 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/distorted-reality-ep"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -189,6 +205,7 @@
       <category>Drum &amp; Bass</category>
       <category>Halftime Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH108/PLUSH108.jpg" length="4579662" type="image/jpeg" />
+      <plush:bandcampAlbum>3367462665</plush:bandcampAlbum>
       <description>Kaos Emotion / Starscape by Ha-Zb &amp; nCamargo. Drum &amp; Bass, Halftime Drum &amp; Bass. Out 2017-11-15 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/kaos-emotion-starscape"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -198,6 +215,7 @@
       <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH107/PLUSH107.jpg" length="4434284" type="image/jpeg" />
+      <plush:bandcampAlbum>4142106245</plush:bandcampAlbum>
       <description>Node / Calibruh by Mike Intake. Drum &amp; Bass. Out 2017-10-31 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/node-calibruh"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -207,6 +225,7 @@
       <pubDate>Wed, 25 Oct 2017 00:00:00 +0000</pubDate>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH106/PLUSH106.jpg" length="4434284" type="image/jpeg" />
+      <plush:bandcampAlbum>3826544190</plush:bandcampAlbum>
       <description>Void EP by Altered Perception. Drum &amp; Bass. Out 2017-10-25 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/void-ep"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -217,6 +236,7 @@
       <category>Drum &amp; Bass</category>
       <category>Liquid Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH105/PLUSH105.jpg" length="5111179" type="image/jpeg" />
+      <plush:bandcampAlbum>595909223</plush:bandcampAlbum>
       <description>Moods / Setback by Incus. Drum &amp; Bass, Liquid Drum &amp; Bass. Out 2017-09-08 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/moods-setback"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -226,6 +246,7 @@
       <pubDate>Tue, 04 Jul 2017 00:00:00 +0000</pubDate>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH104/PLUSH104.jpg" length="1801886" type="image/jpeg" />
+      <plush:bandcampAlbum>46532808</plush:bandcampAlbum>
       <description>Cold City / Pugilist by Todd Buchler. Drum &amp; Bass. Out 2017-07-04 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/cold-city-pugilist"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -236,6 +257,7 @@
       <category>Drum &amp; Bass</category>
       <category>Jungle</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH103/PLUSH103.jpg" length="2324365" type="image/jpeg" />
+      <plush:bandcampAlbum>1872955866</plush:bandcampAlbum>
       <description>Ice Cold by Samurai Breaks &amp; Formatz. Drum &amp; Bass, Jungle. Out 2017-05-22 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/ice-cold"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -245,6 +267,7 @@
       <pubDate>Mon, 17 Apr 2017 00:00:00 +0000</pubDate>
       <category>Liquid Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH102/PLUSH102.jpg" length="2697416" type="image/jpeg" />
+      <plush:bandcampAlbum>3400300506</plush:bandcampAlbum>
       <description>Early Riser / Broadcast by bornintofault. Liquid Drum &amp; Bass. Out 2017-04-17 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/early-riser-broadcast"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -255,6 +278,7 @@
       <category>Jungle</category>
       <category>Atmospheric Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH101D/PLUSH101D.jpg" length="1762229" type="image/jpeg" />
+      <plush:bandcampAlbum>2522662156</plush:bandcampAlbum>
       <description>The Prowler / Brocken Spectre by Bane &amp; Earl Grey. Jungle, Atmospheric Drum &amp; Bass. Out 2017-04-03 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/the-prowler-brocken-spectre"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -265,6 +289,7 @@
       <category>Drum &amp; Bass</category>
       <category>Jungle</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH100/PLUSH100.jpg" length="1172286" type="image/jpeg" />
+      <plush:bandcampAlbum>1294239723</plush:bandcampAlbum>
       <description>Plush Recordings #100 by Various Artists. Drum &amp; Bass, Jungle. Out 2017-03-21 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/plush-recordings-100"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -274,6 +299,7 @@
       <pubDate>Mon, 06 Feb 2017 00:00:00 +0000</pubDate>
       <category>Halftime Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH099D/PLUSH099D.jpg" length="877932" type="image/jpeg" />
+      <plush:bandcampAlbum>420282307</plush:bandcampAlbum>
       <description>Sunburst / Tenacity by Heatwave. Halftime Drum &amp; Bass. Out 2017-02-06 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/sunburst-tenacity"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -283,6 +309,7 @@
       <pubDate>Mon, 16 Jan 2017 00:00:00 +0000</pubDate>
       <category>Drum &amp; Bass</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH098D/PLUSH098D.jpg" length="2914810" type="image/jpeg" />
+      <plush:bandcampAlbum>2060530545</plush:bandcampAlbum>
       <description>Your Truth by Altered Perception. Drum &amp; Bass. Out 2017-01-16 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/your-truth"&gt;Listen&lt;/a&gt;</description>
     </item>
     <item>
@@ -292,6 +319,7 @@
       <pubDate>Mon, 02 Jan 2017 00:00:00 +0000</pubDate>
       <category>Jungle</category>
       <enclosure url="https://about.plushrecs.com/cat/PLUSH097D/PLUSH097D.jpg" length="1387027" type="image/jpeg" />
+      <plush:bandcampAlbum>1935832147</plush:bandcampAlbum>
       <description>Metalnaps / Burntrare by Goreteks &amp; martianMan. Jungle. Out 2017-01-02 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/metalnaps-burntrare"&gt;Listen&lt;/a&gt;</description>
     </item>
   </channel>
