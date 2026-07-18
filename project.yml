@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=.constellation/project.schema.json
+config_version: 1
+project:
+  id: plushrecs
+  name: Plush Recordings (label site — GZ orphan, active; distinct from plushrecs-agent)
+  family: studio
+git_host:
+  provider: github
+  slug: keybrdist/plushrecs
+tracker:
+  adapter: github
+  project_key: keybrdist/plushrecs
+loops: []
+ci:
+  provider: unknown
