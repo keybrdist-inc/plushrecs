@@ -242,6 +242,7 @@
         }
 
         var PLUSH_NS = "https://plushrecs.com/ns/feed";
+        var BINPROXY_ORIGIN = "https://binproxy.keybrd.ist";
 
         function bandcampAlbum(node) {
             // Read the namespaced <plush:bandcampAlbum> element (present only
@@ -255,6 +256,40 @@
             }
             var v = el && el.textContent ? el.textContent.trim() : "";
             return /^[0-9]+$/.test(v) ? v : "";
+        }
+
+        function thumbnailUrl(node) {
+            var el = null;
+            if (node.getElementsByTagNameNS) {
+                el = node.getElementsByTagNameNS(PLUSH_NS, "thumbnail")[0];
+            }
+            if (!el) {
+                el = node.getElementsByTagName("plush:thumbnail")[0];
+            }
+            var value = el && el.textContent ? el.textContent.trim() : "";
+            if (!value) return "";
+
+            try {
+                var url = new URL(value);
+                if (
+                    url.protocol !== "https:" ||
+                    url.origin !== BINPROXY_ORIGIN ||
+                    url.username ||
+                    url.password
+                ) {
+                    return "";
+                }
+                return url.href;
+            } catch (err) {
+                return "";
+            }
+        }
+
+        function showBlankCover(cover, img) {
+            img.onerror = null;
+            cover.className = "cover blank";
+            cover.textContent = "PLUSH";
+            if (img.parentNode) img.parentNode.removeChild(img);
         }
 
         function instantiateEmbed(container) {
@@ -312,16 +347,22 @@
                 var cover = document.createElement("div");
                 var enclosure = item.getElementsByTagName("enclosure")[0];
                 var coverUrl = enclosure ? enclosure.getAttribute("url") : "";
-                if (coverUrl) {
+                var thumbnail = thumbnailUrl(item);
+                var initialCoverUrl = thumbnail || coverUrl;
+                if (initialCoverUrl) {
                     cover.className = "cover";
                     var img = document.createElement("img");
                     img.loading = "lazy";
                     img.alt = "";
-                    img.src = coverUrl;
+                    img.src = initialCoverUrl;
+                    var canFallBackToEnclosure = Boolean(thumbnail && coverUrl);
                     img.onerror = function () {
-                        cover.className = "cover blank";
-                        cover.textContent = "PLUSH";
-                        if (img.parentNode) img.parentNode.removeChild(img);
+                        if (canFallBackToEnclosure) {
+                            canFallBackToEnclosure = false;
+                            img.src = coverUrl;
+                            return;
+                        }
+                        showBlankCover(cover, img);
                     };
                     cover.appendChild(img);
                 } else {
