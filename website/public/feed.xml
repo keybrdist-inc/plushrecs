@@ -7,7 +7,18 @@
     <language>en-us</language>
     <atom:link href="https://about.plushrecs.com/feed.xml" rel="self" type="application/rss+xml" />
     <ttl>720</ttl>
-    <lastBuildDate>Thu, 06 Aug 2026 15:24:58 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 15 Aug 2026 04:39:46 +0000</lastBuildDate>
+    <item>
+      <title>DJ Airwalk - Flights to Catch [PLUSH128]</title>
+      <link>https://plush.bandcamp.com/album/flights-to-catch</link>
+      <guid isPermaLink="false">plushrecs:PLUSH128</guid>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 +0000</pubDate>
+      <category>Jungle</category>
+      <enclosure url="https://about.plushrecs.com/cat/PLUSH128/PLUSH128.jpg" length="1677424" type="image/jpeg" />
+      <plush:thumbnail>https://binproxy.keybrd.ist/w=192,h=192,fit=cover,format=webp,sig=plushrecs.3ba0077e52ce7a3dcdd49edac8786251f278b18f85742f540461d5b12d376d11/https://about.plushrecs.com/cat/PLUSH128/PLUSH128.jpg</plush:thumbnail>
+      <plush:bandcampAlbum>2695802864</plush:bandcampAlbum>
+      <description>Flights to Catch by DJ Airwalk. Jungle. Out 2026-08-15 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/flights-to-catch"&gt;Listen&lt;/a&gt;</description>
+    </item>
     <item>
       <title>LO! - Lose Control [PLUSH126]</title>
       <link>https://plush.bandcamp.com/album/lose-control</link>
@@ -340,17 +351,6 @@
       <plush:thumbnail>https://binproxy.keybrd.ist/w=192,h=192,fit=cover,format=webp,sig=plushrecs.d4d61001880a9d39aa3e8db150169ed86473c993da3e70af80e57ed96cc03200/https://about.plushrecs.com/cat/PLUSH098D/PLUSH098D.jpg</plush:thumbnail>
       <plush:bandcampAlbum>2060530545</plush:bandcampAlbum>
       <description>Your Truth by Altered Perception. Drum &amp; Bass. Out 2017-01-16 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/your-truth"&gt;Listen&lt;/a&gt;</description>
-    </item>
-    <item>
-      <title>Goreteks &amp; martianMan - Metalnaps / Burntrare [PLUSH097D]</title>
-      <link>https://plush.bandcamp.com/album/metalnaps-burntrare</link>
-      <guid isPermaLink="false">plushrecs:PLUSH097D</guid>
-      <pubDate>Mon, 02 Jan 2017 00:00:00 +0000</pubDate>
-      <category>Jungle</category>
-      <enclosure url="https://about.plushrecs.com/cat/PLUSH097D/PLUSH097D.jpg" length="1387027" type="image/jpeg" />
-      <plush:thumbnail>https://binproxy.keybrd.ist/w=192,h=192,fit=cover,format=webp,sig=plushrecs.47b144ea356a274c732d13198041a64db948069d16705462e3d79a99c51365da/https://about.plushrecs.com/cat/PLUSH097D/PLUSH097D.jpg</plush:thumbnail>
-      <plush:bandcampAlbum>1935832147</plush:bandcampAlbum>
-      <description>Metalnaps / Burntrare by Goreteks &amp; martianMan. Jungle. Out 2017-01-02 on Plush Recordings. &lt;a href="https://plush.bandcamp.com/album/metalnaps-burntrare"&gt;Listen&lt;/a&gt;</description>
     </item>
   </channel>
 </rss>
