@@ -45,10 +45,12 @@ Repository-specific policy calibration is unavailable. The owner explicitly auth
 
 ## RSS restoration follow-up (2026-09-07)
 
-- R1 in progress: issue https://github.com/keybrdist-inc/plushrecs/issues/15 adds
-  feed/cover push events to the single GitHub website publisher. The daily cron
-  and manual preview remain unchanged.
+- R1 reviewed: issue https://github.com/keybrdist-inc/plushrecs/issues/15 adds
+  feed/JPEG-cover push events to the single GitHub website publisher. The daily cron
+  and manual preview remain unchanged. Copilot completed review; its cover-scope
+  findings were fixed by narrowing the trigger and docs to JPEG images.
 - R2 pending: restore scheduled mirror generation and scoped push, with Bandcamp
   enabled and direct Mac deployment removed from that mode.
-- R3 pending: no schedule-event run exists yet. The next scheduled firing is
-  September 8 at 13:23 UTC; both prior manual runs passed.
+- R3 pending as of September 7, 21:32 UTC: no schedule-event run existed at
+  inspection. The configured cron first becomes due September 8 at 13:23 UTC
+  after activation; both prior manual runs passed.

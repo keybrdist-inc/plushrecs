@@ -4,7 +4,7 @@ on:
     branches: [main]
     paths:
       - website/public/feed.xml
-      - website/public/cat/**
+      - website/public/cat/**/*.jpg
   schedule:
     - cron: '23 13 * * *'
   workflow_dispatch:

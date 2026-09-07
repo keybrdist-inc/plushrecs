@@ -54,7 +54,7 @@ To pause future runs, set `PLUSH_WEBSITE_SYNC_ENABLED=false`. An already-running
 
 ## Coordinated RSS deployment
 
-Pushes to main that change `website/public/feed.xml` or `website/public/cat/**`
+Pushes to main that change `website/public/feed.xml` or `website/public/cat/**/*.jpg`
 run the same serialized generation, validation, freshness check, and production
 deployment as the daily schedule. The mirror RSS publisher must commit and push
 only the feed and its covers using its normal GitHub user authentication; it
