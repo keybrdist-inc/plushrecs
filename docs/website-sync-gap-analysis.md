@@ -2,7 +2,7 @@
 
 Date: 2026-09-07
 Primary issue: https://github.com/keybrdist-inc/plushrecs/issues/11
-Status: generator corrections and live preview validated; GitHub runner preview and production cutover remain pending.
+Status: automatic sync activated and first production deployment verified. No activation blockers remain.
 
 ## Current verified state
 
@@ -11,24 +11,31 @@ Status: generator corrections and live preview validated; GitHub runner preview 
 - LABELGRID_API_TOKEN, CLOUDFLARE_API_TOKEN, and CLOUDFLARE_ACCOUNT_ID are configured in GitHub environment plush-website-production. LABELGRID_LABEL_ID=2 is configured. Secret values were not printed or stored in reports.
 - A read-only live request returned 136 rows. Legacy HTTP or placeholder links in 21 historical entries exposed validation occurring before homepage selection. The correction validates pagination, IDs, duplicate catalogs, and dates across the response, then validates public metadata/HTTPS links only for the selected 12 entries. LabelGrid records are unchanged.
 - The corrected generator produced a live preview of 12 released Plush entries. All 12 cover URLs returned HTTP 200 with browser request headers. Four existing Bandcamp player URLs match current LabelGrid data, and the tested player returned HTTP 200. Default Python user-agent requests encountered Cloudflare 1010 filtering, not missing artwork.
-- The Mac admin job is loaded and currently contains the old whole-site RSS publisher. PLUSH_WEBSITE_SYNC_ENABLED remains false during preparation. No GitHub sync/deploy workflow has been dispatched yet.
+- PLUSH_WEBSITE_SYNC_ENABLED=true is configured. GitHub preview run 34161818604 passed, followed by production run 34161867924. The Mac publisher segment is removed, PLUSH_RSS_PUBLISH_ENABLED=0, and the admin job remains loaded on its original 10800-second interval with RunAtLoad=false. Reload caused no immediate admin execution.
 
 ## Action ledger
 
 - A1 done: source/API contract discovery and duplicate search.
 - A2 done: owner confirmed repository and homepage scope.
 - A3 done: initial implementation merged, including the reviewed closing-marker indentation fix.
-- A4 in progress: owner authorized setup and production activation. Cutover will remove only the Mac RSS publication segment, retain the admin job's 10800-second schedule, and reload without immediate execution before enabling the GitHub publisher.
+- A4 done: owner-authorized cutover removed only the Mac RSS publication segment and retained the admin job schedule. The GitHub publisher is enabled without per-run approval gates.
 - A5 deferred: the agent installer omits the --bandcamp flag required by its RSS runbook. This separate source-code fix is unnecessary for cutover because that publisher will be disabled.
 - A6 done: authorized credential validation, GitHub secret provisioning, and confirmed label ID.
-- A7 review close-out: follow-up PR https://github.com/keybrdist-inc/plushrecs/pull/13 corrects selection-before-public-field-validation. All 19 pre-push tests and code-head CI passed. Copilot reviewed the code and raised one documentation consistency finding, corrected here; thread resolution and final-head CI are verified in the session handoff.
-- A8 pending: GitHub runner preview, publisher cutover, initial production sync, and verification of the daily schedule.
+- A7 done: follow-up PR https://github.com/keybrdist-inc/plushrecs/pull/13 merged after all 19 pre-push tests and final-head CI passed. Copilot's documentation consistency finding was fixed, replied to, and resolved. Final sweep found no outstanding findings.
+- A8 done: runner preview matched the local verified preview; production deployment succeeded and the custom-domain catalog matched the artifact. Daily cron is 23 13 * * *, or 07:23 Denver daylight time / 06:23 standard time.
 
-## Remaining activation checks
+## Deployment evidence and operating limits
 
-Run the workflow with publish=false and inspect its artifact. Confirm GitHub can push the generated catalog and Cloudflare can deploy from that runner. The main branch is unprotected; the workflow requests contents: write. Validate the deployed homepage after the first production run.
+- Preview: https://github.com/keybrdist-inc/plushrecs/actions/runs/34161818604 (success; commit/deploy steps skipped).
+- Production: https://github.com/keybrdist-inc/plushrecs/actions/runs/34161867924 (success).
+- Generated catalog commit: 72f5215f73543e9b71057011b4ef51987bea092a.
+- Cloudflare production deployment: 8ff3fb9c-959d-4581-9930-f0a92f3e48ec, associated with that exact commit; latest deployment stage succeeded.
+- https://about.plushrecs.com/ returned HTTP 200 and its catalog region exactly matched the validated artifact (12 cards, including PLUSH128).
+- GitHub main is unprotected and the workflow's contents: write permission successfully pushed the generated catalog. Environment secrets and label ID were verified by the successful runner, without exposing secret values.
 
-Both publishers upload the whole site. Remove the Mac RSS publication step before enabling unattended GitHub publication. This pauses website RSS feed updates; its existing feed remains published. The admin sweep, LabelGrid refresh, and Drive mirror steps remain scheduled. Local RSS generation remains available separately.
+The daily trigger is enabled but its first scheduled firing has not occurred yet; initial verification used workflow_dispatch through the same generation/commit/deploy path. GitHub scheduling can be delayed.
+
+The old Mac publisher is disabled to prevent competing whole-site uploads. Website RSS feed updates are paused; its existing feed remains published. Local RSS generation remains available separately. Restoring automatic RSS publication is a separate coordinated follow-up, not an activation blocker for homepage sync.
 
 ## Review and policy evidence
 
