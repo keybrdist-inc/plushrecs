@@ -65,6 +65,23 @@ class SyncCatalogTests(unittest.TestCase):
         selected = sync_catalog.eligible_releases(rows, dt.date(2026, 9, 7))
         self.assertEqual([item["cat"] for item in selected], [f"PLUSH{index:03d}" for index in range(14, 2, -1)])
 
+    def test_unused_historical_links_do_not_block_the_latest_twelve(self):
+        rows = [release(f"PLUSH{index:03d}", "2026-01-01") for index in range(116, 128)]
+        rows += [release("PLUSH115", "2020-01-01", spotify_url="http://open.spotify.com/album/old"),
+                 release("PLUSH050D", "2010-01-01", bandcamp_url="-")]
+        selected = sync_catalog.eligible_releases(rows, dt.date(2026, 9, 7))
+        self.assertEqual([item["cat"] for item in selected], [f"PLUSH{index:03d}" for index in range(127, 115, -1)])
+        rows[0]["spotify_url"] = "http://open.spotify.com/album/displayed"
+        with self.assertRaises(sync_catalog.CatalogError):
+            sync_catalog.eligible_releases(rows, dt.date(2026, 9, 7))
+
+    def test_old_dates_and_duplicate_catalogs_still_fail_before_selection(self):
+        recent = [release(f"PLUSH{index:03d}", "2026-01-01") for index in range(116, 128)]
+        for old in ([release("PLUSH115", "invalid-date")],
+                    [release("PLUSH115", "2020-01-01"), release("PLUSH115", "2010-01-01", id=200)]):
+            with self.subTest(old=old), self.assertRaises(sync_catalog.CatalogError):
+                sync_catalog.eligible_releases(recent + old, dt.date(2026, 9, 7))
+
     def test_html_is_escaped_and_unsafe_links_rejected(self):
         item = sync_catalog.eligible_releases([release()], dt.date(2026, 9, 7))[0]
         rendered = sync_catalog.render_catalog([item])

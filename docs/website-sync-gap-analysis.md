@@ -48,3 +48,13 @@ Manual risk assessment: this adds API-authenticated catalog generation and gated
 ## Copilot follow-up
 
 Copilot reviewed commit 927560dc460b6995004fda045d6ef17b984258e4 and reported one inline finding (comment 3952188822). The replacement function discarded indentation immediately before the closing catalog marker. The fix retains whitespace on a standalone closing-marker line while keeping existing inline-marker behavior, and adds an exact-output/idempotence regression test. The original unanswered Kody request is retained as historical evidence; no duplicate trigger is needed now that a completed reviewer report is available.
+
+## Live activation follow-up
+
+Project-scoped credentials verified Plush Recordings as LabelGrid label 2 and the Cloudflare plushrecs project. GitHub production environment secrets and label ID are configured, with publication still disabled during validation. The exported shell credentials belonged to different access scopes and were not installed.
+
+A live dry run exposed legacy HTTP and placeholder links in 21 historical entries. All 12 intended homepage entries pass strict public-field validation. The generator now validates pagination, identity, and dates before selection, then validates public metadata/links only for the displayed 12. Tests retain failure for unsafe displayed links, malformed historical dates, and duplicate catalogs. No LabelGrid records are changed.
+
+- A6 done: configured and verified the project credentials and label ID without displaying secret values.
+- A7 in progress: generator selection correction, pre-push validation and follow-up PR/review.
+- A8 pending: verified preview, publisher cutover, initial production sync, and scheduled-run confirmation under the owner's activation authorization.
