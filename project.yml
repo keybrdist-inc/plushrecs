@@ -6,10 +6,13 @@ project:
   family: studio
 git_host:
   provider: github
-  slug: keybrdist/plushrecs
+  slug: keybrdist-inc/plushrecs
 tracker:
   adapter: github
-  project_key: keybrdist/plushrecs
+  project_key: keybrdist-inc/plushrecs
 loops: []
 ci:
-  provider: unknown
+  provider: github-actions
+testing:
+  default: python3 -m unittest discover -s tests -v
+  full_suite: python3 -m unittest discover -s tests -v
