@@ -51,3 +51,17 @@ Before activation, the owner must approve these production effects and complete:
 6. Confirm the deployed homepage and an existing Bandcamp player, then monitor workflow failures in GitHub Actions. This workflow sends no outbound messages.
 
 To pause future runs, set `PLUSH_WEBSITE_SYNC_ENABLED=false`. An already-running deployment is not cancelled by changing that variable. Use Cloudflare's previous successful deployment for an owner-approved rollback, and reconcile the source catalog before re-enabling sync.
+
+## Coordinated RSS deployment
+
+Pushes to main that change `website/public/feed.xml` or `website/public/cat/**/*.jpg`
+run the same serialized generation, validation, freshness check, and production
+deployment as the daily schedule. The mirror RSS publisher must commit and push
+only the feed and its covers using its normal GitHub user authentication; it
+must not upload the whole website to Cloudflare. GitHub-token-generated pushes
+do not trigger another workflow, preventing catalog commit loops.
+
+A failed feed-triggered deployment can be retried with a publishing manual run;
+the daily publishing run also retries unchanged content. The existing feed XML
+and its embeds, thumbnails, news, and stable GUIDs remain generated from the
+release mirror. This workflow does not change the RSS data source.

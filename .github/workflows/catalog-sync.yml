@@ -1,5 +1,10 @@
 name: Sync LabelGrid catalog
 on:
+  push:
+    branches: [main]
+    paths:
+      - website/public/feed.xml
+      - website/public/cat/**/*.jpg
   schedule:
     - cron: '23 13 * * *'
   workflow_dispatch:
@@ -42,7 +47,7 @@ jobs:
           path: website/public/index.html
           retention-days: 7
       - name: Commit and push catalog changes
-        if: github.event_name == 'schedule' || inputs.publish
+        if: github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -54,7 +59,7 @@ jobs:
           git fetch --no-write-fetch-head origin main:refs/remotes/origin/main
           test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
       - name: Deploy production site
-        if: github.event_name == 'schedule' || inputs.publish
+        if: github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish
         uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
