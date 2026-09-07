@@ -2,49 +2,36 @@
 
 Date: 2026-09-07
 Primary issue: https://github.com/keybrdist-inc/plushrecs/issues/11
-Status: PR open; Copilot review received and its single finding fixed. Final thread and CI verification are recorded in the session handoff. Production activation held.
+Status: generator corrections and live preview validated; GitHub runner preview and production cutover remain pending.
 
-PR: https://github.com/keybrdist-inc/plushrecs/pull/12
+## Current verified state
 
-## Verified scope
-
-The homepage contains hardcoded release cards. The existing agent RSS publisher updates feed.xml and covers, then deploys the whole site, but does not regenerate the homepage catalog. The owner confirmed homepage catalog sync and keybrdist-inc/plushrecs as the canonical repository. This change corrects stale project.yml routing accordingly.
-
-The LabelGrid release-list OpenAPI contract supports integer filter[is_live], filter[label_id], and paginated data/meta. Public rendering uses cat, title, default_display_artist, release_date, front_cover.url, and supplied store URLs. No release status enum or catalog number is inferred. The generator validates the complete response before replacing the marked homepage region. Existing known Bandcamp players are retained through a checked-in mapping.
-
-## Remaining gaps
-
-- Live LabelGrid behavior and account configuration are unverified. No credentials or authenticated API responses were accessed. Validate the label ID, live filter, metadata, and public cover URLs before activation.
-- The existing Mac RSS publisher deploys the entire site from a different checkout. Coordinate or pause it before activating this workflow to avoid overwriting a fresh catalog with stale HTML. This change does not modify that job.
-- GitHub Actions secrets, environment protections, permission to commit generated output to main, and Cloudflare deployment credentials require owner setup/verification. The enable variable defaults off.
-- New Bandcamp embed IDs are not supplied by the API. New releases use supplied listening links until an exact player mapping is provided.
-- The agent runbook requires --bandcamp in its RSS chain but the inspected installer omits it. That adjacent behavior fix is deferred to the agent repository.
+- The canonical repository is keybrdist-inc/plushrecs. The initial implementation is merged. It adds a LabelGrid catalog generator, preserved Bandcamp mappings, offline tests, and gated daily publication.
+- Authorized project credentials identify Plush Recordings as LabelGrid label 2 and confirm the Cloudflare plushrecs project serves about.plushrecs.com. The shell-exported credentials belonged to different access scopes and were not provisioned.
+- LABELGRID_API_TOKEN, CLOUDFLARE_API_TOKEN, and CLOUDFLARE_ACCOUNT_ID are configured in GitHub environment plush-website-production. LABELGRID_LABEL_ID=2 is configured. Secret values were not printed or stored in reports.
+- A read-only live request returned 136 rows. Legacy HTTP or placeholder links in 21 historical entries exposed validation occurring before homepage selection. The correction validates pagination, IDs, duplicate catalogs, and dates across the response, then validates public metadata/HTTPS links only for the selected 12 entries. LabelGrid records are unchanged.
+- The corrected generator produced a live preview of 12 released Plush entries. All 12 cover URLs returned HTTP 200 with browser request headers. Four existing Bandcamp player URLs match current LabelGrid data, and the tested player returned HTTP 200. Default Python user-agent requests encountered Cloudflare 1010 filtering, not missing artwork.
+- The Mac admin job is loaded and currently contains the old whole-site RSS publisher. PLUSH_WEBSITE_SYNC_ENABLED remains false during preparation. No GitHub sync/deploy workflow has been dispatched yet.
 
 ## Action ledger
 
-- A1 done: read-only discovery using smaller-model scouts, source/schema verification, and duplicate searches.
-- A2 done: canonical repository and homepage scope confirmed by owner.
-- A3 review fix prepared: PR 12 received a completed Copilot review with one finding after the initial Kody wait. The generator now preserves closing-marker indentation, with a regression test for exact suffix preservation and repeated generation. Final thread resolution and current-head CI status are verified at handoff.
-- A4 paused-for-HITL: merge, production activation, live account verification, and coordination with the old publisher. Complete the activation procedure in website-sync.md after approval.
-- A5 deferred-why: RSS --bandcamp discrepancy belongs to a separate repository and is outside this homepage implementation.
+- A1 done: source/API contract discovery and duplicate search.
+- A2 done: owner confirmed repository and homepage scope.
+- A3 done: initial implementation merged, including the reviewed closing-marker indentation fix.
+- A4 in progress: owner authorized setup and production activation. Cutover will remove only the Mac RSS publication segment, retain the admin job's 10800-second schedule, and reload without immediate execution before enabling the GitHub publisher.
+- A5 deferred: the agent installer omits the --bandcamp flag required by its RSS runbook. This separate source-code fix is unnecessary for cutover because that publisher will be disabled.
+- A6 done: authorized credential validation, GitHub secret provisioning, and confirmed label ID.
+- A7 review close-out: follow-up PR https://github.com/keybrdist-inc/plushrecs/pull/13 corrects selection-before-public-field-validation. All 19 pre-push tests and code-head CI passed. Copilot reviewed the code and raised one documentation consistency finding, corrected here; thread resolution and final-head CI are verified in the session handoff.
+- A8 pending: GitHub runner preview, publisher cutover, initial production sync, and verification of the daily schedule.
 
-## Validation
+## Remaining activation checks
 
-GitHub workflow syntax passes actionlint 1.7.12. All 16 offline regression tests passed through the pre-push hook. Local structural review found no remaining critical defects after fixing embed-map lookup/rendering and API validation. No live API or production smoke test ran.
+Run the workflow with publish=false and inspect its artifact. Confirm GitHub can push the generated catalog and Cloudflare can deploy from that runner. The main branch is unprotected; the workflow requests contents: write. Validate the deployed homepage after the first production run.
 
-The required policy checker reported: `policy: missing or unreadable escalation matrix: /Users/keybrdistt/.claude/skills/llm-autonomy-policy/escalation-matrix.plushrecs.md`. No Plush calibration was found in the Codex/Claude skill locations or shared skill source. This is an unavailable policy verdict, not a policy pass. The owner explicitly authorized continuing with this documented manual assessment. The policy verdict remains unavailable; no calibration files were changed.
+Both publishers upload the whole site. Remove the Mac RSS publication step before enabling unattended GitHub publication. This pauses website RSS feed updates; its existing feed remains published. The admin sweep, LabelGrid refresh, and Drive mirror steps remain scheduled. Local RSS generation remains available separately.
 
-Manual risk assessment: this adds API-authenticated catalog generation and gated production publishing. PR checks have no deployment credentials. The shipped enable gate is off unless explicitly configured. No production effects occur from the local implementation. Activation still needs owner approval, live API verification, and publisher coordination. No changes were made to global policy files.
+## Review and policy evidence
 
-## External review ledger
+The initial Kody request received no response in its two delayed polling windows. Copilot subsequently reviewed the initial implementation; its single finding was fixed, replied to, and resolved. The follow-up requested Kody once and explicitly requested the already-available Copilot reviewer. The first five-minute poll found Copilot's completed review with one documentation finding and no code findings.
 
-- Review requested once with `@kody start-review` at 2026-09-07T18:55:40Z, after checking all three GitHub review surfaces and finding no review-bot activity.
-- Immediate confirmation: request comment 5574642463 exists on PR 12.
-- Delayed poll 1 at 19:00:57Z: only the request comment exists; no inline findings or reviews.
-- Delayed poll 2 at 19:06:05Z: unchanged; no reviewer acknowledgement, inline findings, or reviews.
-- Outcome: PENDING, not approval. The allowed two-poll window is exhausted. No repeated trigger or speculative reviewer mention was posted. An available reviewer or human review is needed to close the review loop.
-- A final documentation-only commit records this ledger; no runtime code changed after the successful code-head CI check. Its pre-push/CI result is reported with the session handoff.
-
-## Copilot follow-up
-
-Copilot reviewed commit 927560dc460b6995004fda045d6ef17b984258e4 and reported one inline finding (comment 3952188822). The replacement function discarded indentation immediately before the closing catalog marker. The fix retains whitespace on a standalone closing-marker line while keeping existing inline-marker behavior, and adds an exact-output/idempotence regression test. The original unanswered Kody request is retained as historical evidence; no duplicate trigger is needed now that a completed reviewer report is available.
+Repository-specific policy calibration is unavailable. The owner explicitly authorized delivery using the manual assessment and later authorized fixes and activation for this session. This is not a policy-check pass; no global policy files were changed. The changes generate public output from read-only API data, keep tokens on the build runner, and retain an explicit publication gate.

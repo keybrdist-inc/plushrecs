@@ -135,7 +135,7 @@ def fetch_all_releases(label_id: int, token: str, fetch_page: Callable[[int], di
     return all_rows
 
 
-def _normalize_release(row: dict[str, Any], today: dt.date) -> dict[str, Any] | None:
+def _release_date(row: dict[str, Any], today: dt.date) -> dt.date | None:
     cat = row.get("cat")
     if not isinstance(cat, str) or not CAT_RE.fullmatch(cat):
         return None
@@ -150,6 +150,11 @@ def _normalize_release(row: dict[str, Any], today: dt.date) -> dict[str, Any] | 
         raise CatalogError(f"invalid metadata for {cat}") from None
     if release_date > today:
         return None
+    return release_date
+
+
+def _normalize_release(row: dict[str, Any], release_date: dt.date) -> dict[str, Any]:
+    cat = row["cat"]
     title = row.get("title")
     artist = row.get("default_display_artist")
     cover = row.get("front_cover")
@@ -165,14 +170,14 @@ def _normalize_release(row: dict[str, Any], today: dt.date) -> dict[str, Any] | 
 
 def eligible_releases(rows: Iterable[dict[str, Any]], today: dt.date | None = None) -> list[dict[str, Any]]:
     today = today or dt.datetime.now(dt.timezone.utc).date()
-    normalized = [item for row in rows if (item := _normalize_release(row, today)) is not None]
-    cats = [item["cat"] for item in normalized]
+    candidates = [(date, row) for row in rows if (date := _release_date(row, today)) is not None]
+    cats = [row["cat"] for _, row in candidates]
     if len(cats) != len(set(cats)):
         raise CatalogError("duplicate eligible catalog numbers")
-    normalized.sort(key=lambda item: (item["date"], item["cat"]), reverse=True)
-    if not normalized:
+    candidates.sort(key=lambda item: (item[0], item[1]["cat"]), reverse=True)
+    if not candidates:
         raise CatalogError("no eligible Plush releases")
-    return normalized[:12]
+    return [_normalize_release(row, date) for date, row in candidates[:12]]
 
 
 def render_catalog(releases: Iterable[dict[str, Any]], embeds: dict[str, Any] | None = None) -> str:
