@@ -2,7 +2,9 @@
 
 Date: 2026-09-07
 Primary issue: https://github.com/keybrdist-inc/plushrecs/issues/11
-Status: local implementation validated; owner authorized push/PR using the manual risk assessment; production activation held.
+Status: PR open and validation passed; external reviewer silent after both delayed polls; paused for HITL. Production activation held.
+
+PR: https://github.com/keybrdist-inc/plushrecs/pull/12
 
 ## Verified scope
 
@@ -22,7 +24,7 @@ The LabelGrid release-list OpenAPI contract supports integer filter[is_live], fi
 
 - A1 done: read-only discovery using smaller-model scouts, source/schema verification, and duplicate searches.
 - A2 done: canonical repository and homepage scope confirmed by owner.
-- A3 in progress: local implementation complete and all 16 tests pass through .githooks/pre-push. Owner authorized continuing with the documented manual assessment despite unavailable policy calibration. Push, PR creation, and review are now authorized; production activation is not.
+- A3 paused-for-HITL: PR 12 is open. Implementation and all 16 pre-push tests are complete; Catalog checks passed on the reviewed code head a1f9e6bc9fb600bb9df8175b13fd9a5a858980e6. External review is incomplete: no acknowledgement or findings after both delayed polls. This delivery item is not done until external/human review is completed. The owner authorized the documented manual policy assessment, not production activation.
 - A4 paused-for-HITL: merge, production activation, live account verification, and coordination with the old publisher. Complete the activation procedure in website-sync.md after approval.
 - A5 deferred-why: RSS --bandcamp discrepancy belongs to a separate repository and is outside this homepage implementation.
 
@@ -33,3 +35,12 @@ GitHub workflow syntax passes actionlint 1.7.12. All 16 offline regression tests
 The required policy checker reported: `policy: missing or unreadable escalation matrix: /Users/keybrdistt/.claude/skills/llm-autonomy-policy/escalation-matrix.plushrecs.md`. No Plush calibration was found in the Codex/Claude skill locations or shared skill source. This is an unavailable policy verdict, not a policy pass. The owner explicitly authorized continuing with this documented manual assessment. The policy verdict remains unavailable; no calibration files were changed.
 
 Manual risk assessment: this adds API-authenticated catalog generation and gated production publishing. PR checks have no deployment credentials. The shipped enable gate is off unless explicitly configured. No production effects occur from the local implementation. Activation still needs owner approval, live API verification, and publisher coordination. No changes were made to global policy files.
+
+## External review ledger
+
+- Review requested once with `@kody start-review` at 2026-09-07T18:55:40Z, after checking all three GitHub review surfaces and finding no review-bot activity.
+- Immediate confirmation: request comment 5574642463 exists on PR 12.
+- Delayed poll 1 at 19:00:57Z: only the request comment exists; no inline findings or reviews.
+- Delayed poll 2 at 19:06:05Z: unchanged; no reviewer acknowledgement, inline findings, or reviews.
+- Outcome: PENDING, not approval. The allowed two-poll window is exhausted. No repeated trigger or speculative reviewer mention was posted. An available reviewer or human review is needed to close the review loop.
+- A final documentation-only commit records this ledger; no runtime code changed after the successful code-head CI check. Its pre-push/CI result is reported with the session handoff.
