@@ -42,3 +42,13 @@ The old Mac publisher is disabled to prevent competing whole-site uploads. Websi
 The initial Kody request received no response in its two delayed polling windows. Copilot subsequently reviewed the initial implementation; its single finding was fixed, replied to, and resolved. The follow-up requested Kody once and explicitly requested the already-available Copilot reviewer. The first five-minute poll found Copilot's completed review with one documentation finding and no code findings.
 
 Repository-specific policy calibration is unavailable. The owner explicitly authorized delivery using the manual assessment and later authorized fixes and activation for this session. This is not a policy-check pass; no global policy files were changed. The changes generate public output from read-only API data, keep tokens on the build runner, and retain an explicit publication gate.
+
+## RSS restoration follow-up (2026-09-07)
+
+- R1 in progress: issue https://github.com/keybrdist-inc/plushrecs/issues/15 adds
+  feed/cover push events to the single GitHub website publisher. The daily cron
+  and manual preview remain unchanged.
+- R2 pending: restore scheduled mirror generation and scoped push, with Bandcamp
+  enabled and direct Mac deployment removed from that mode.
+- R3 pending: no schedule-event run exists yet. The next scheduled firing is
+  September 8 at 13:23 UTC; both prior manual runs passed.
