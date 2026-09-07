@@ -82,6 +82,13 @@ class SyncCatalogTests(unittest.TestCase):
         with self.assertRaises(sync_catalog.CatalogError):
             sync_catalog.replace_catalog(source.replace("<!-- LABELGRID_CATALOG_START -->", ""), "x")
 
+    def test_indented_closing_marker_line_is_preserved(self):
+        suffix = "\t    " + sync_catalog.END_MARKER + "\n</div>\nfooter"
+        source = "header\n    " + sync_catalog.START_MARKER + "\nold card\n" + suffix
+        updated = sync_catalog.replace_catalog(source, "new card")
+        self.assertEqual(updated, "header\n    " + sync_catalog.START_MARKER + "\nnew card\n" + suffix)
+        self.assertEqual(sync_catalog.replace_catalog(updated, "new card"), updated)
+
     def test_embed_requires_exact_bandcamp_url(self):
         item = sync_catalog.eligible_releases([release()], dt.date(2026, 9, 7))[0]
         embed = {"PLUSH126": {"url": item["links"]["bandcamp_url"], "embed": "https://bandcamp.com/EmbeddedPlayer/album=1/"}}

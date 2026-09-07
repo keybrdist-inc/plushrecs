@@ -207,6 +207,9 @@ def replace_catalog(html_text: str, content: str) -> str:
     end = html_text.index(END_MARKER)
     if end < start:
         raise CatalogError("catalog markers are out of order")
+    end_line = html_text.rfind("\n", start, end) + 1
+    if end_line >= start and not html_text[end_line:end].strip():
+        end = end_line
     return html_text[:start] + "\n" + content + "\n" + html_text[end:]
 
 

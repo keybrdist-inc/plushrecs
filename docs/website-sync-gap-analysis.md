@@ -2,7 +2,7 @@
 
 Date: 2026-09-07
 Primary issue: https://github.com/keybrdist-inc/plushrecs/issues/11
-Status: PR open and validation passed; external reviewer silent after both delayed polls; paused for HITL. Production activation held.
+Status: PR open; Copilot review received and its single finding fixed. Final thread and CI verification are recorded in the session handoff. Production activation held.
 
 PR: https://github.com/keybrdist-inc/plushrecs/pull/12
 
@@ -24,7 +24,7 @@ The LabelGrid release-list OpenAPI contract supports integer filter[is_live], fi
 
 - A1 done: read-only discovery using smaller-model scouts, source/schema verification, and duplicate searches.
 - A2 done: canonical repository and homepage scope confirmed by owner.
-- A3 paused-for-HITL: PR 12 is open. Implementation and all 16 pre-push tests are complete; Catalog checks passed on the reviewed code head a1f9e6bc9fb600bb9df8175b13fd9a5a858980e6. External review is incomplete: no acknowledgement or findings after both delayed polls. This delivery item is not done until external/human review is completed. The owner authorized the documented manual policy assessment, not production activation.
+- A3 review fix prepared: PR 12 received a completed Copilot review with one finding after the initial Kody wait. The generator now preserves closing-marker indentation, with a regression test for exact suffix preservation and repeated generation. Final thread resolution and current-head CI status are verified at handoff.
 - A4 paused-for-HITL: merge, production activation, live account verification, and coordination with the old publisher. Complete the activation procedure in website-sync.md after approval.
 - A5 deferred-why: RSS --bandcamp discrepancy belongs to a separate repository and is outside this homepage implementation.
 
@@ -44,3 +44,7 @@ Manual risk assessment: this adds API-authenticated catalog generation and gated
 - Delayed poll 2 at 19:06:05Z: unchanged; no reviewer acknowledgement, inline findings, or reviews.
 - Outcome: PENDING, not approval. The allowed two-poll window is exhausted. No repeated trigger or speculative reviewer mention was posted. An available reviewer or human review is needed to close the review loop.
 - A final documentation-only commit records this ledger; no runtime code changed after the successful code-head CI check. Its pre-push/CI result is reported with the session handoff.
+
+## Copilot follow-up
+
+Copilot reviewed commit 927560dc460b6995004fda045d6ef17b984258e4 and reported one inline finding (comment 3952188822). The replacement function discarded indentation immediately before the closing catalog marker. The fix retains whitespace on a standalone closing-marker line while keeping existing inline-marker behavior, and adds an exact-output/idempotence regression test. The original unanswered Kody request is retained as historical evidence; no duplicate trigger is needed now that a completed reviewer report is available.
