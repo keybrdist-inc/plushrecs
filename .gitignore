@@ -3,3 +3,6 @@ _workdir
 node_modules
 export_promolist_from_labelgrid.csv/release_promo_list.csv
 export_reminder_list_from_labelgrid/release_reminders.csv
+
+__pycache__/
+.planning/.cache/

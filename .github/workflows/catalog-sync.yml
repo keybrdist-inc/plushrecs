@@ -1,0 +1,62 @@
+name: Sync LabelGrid catalog
+on:
+  schedule:
+    - cron: '23 13 * * *'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Commit the generated catalog and deploy production
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: plush-website-publication
+  cancel-in-progress: false
+jobs:
+  sync:
+    if: vars.PLUSH_WEBSITE_SYNC_ENABLED == 'true' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: plush-website-production
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Generate catalog in the runner checkout
+        env:
+          LABELGRID_API_TOKEN: ${{ secrets.LABELGRID_API_TOKEN }}
+          LABELGRID_LABEL_ID: ${{ vars.LABELGRID_LABEL_ID }}
+        run: python3 scripts/sync_catalog.py --apply
+      - name: Validate generated page
+        run: python3 -m unittest discover -s tests -v
+      - name: Save generated page for review
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: catalog-preview
+          path: website/public/index.html
+          retention-days: 7
+      - name: Commit and push catalog changes
+        if: github.event_name == 'schedule' || inputs.publish
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --quiet -- website/public/index.html; then
+            git add -- website/public/index.html
+            git commit -m 'chore(catalog): sync released LabelGrid catalog'
+            git push origin HEAD:main
+          fi
+          git fetch --no-write-fetch-head origin main:refs/remotes/origin/main
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+      - name: Deploy production site
+        if: github.event_name == 'schedule' || inputs.publish
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy website/public --project-name plushrecs --branch main
