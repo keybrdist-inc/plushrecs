@@ -2,7 +2,7 @@
 
 Date: 2026-09-07
 Primary issue: https://github.com/keybrdist-inc/plushrecs/issues/11
-Status: local implementation validated; push/PR paused for missing policy calibration; production activation held.
+Status: local implementation validated; owner authorized push/PR using the manual risk assessment; production activation held.
 
 ## Verified scope
 
@@ -22,7 +22,7 @@ The LabelGrid release-list OpenAPI contract supports integer filter[is_live], fi
 
 - A1 done: read-only discovery using smaller-model scouts, source/schema verification, and duplicate searches.
 - A2 done: canonical repository and homepage scope confirmed by owner.
-- A3 paused-for-HITL: local implementation complete and all 16 tests pass through .githooks/pre-push invoked directly. Push/PR stopped because required policy_eval exits 1: missing escalation-matrix.plushrecs.md. No branch push or PR creation occurred. The review-bot loop has not started.
+- A3 in progress: local implementation complete and all 16 tests pass through .githooks/pre-push. Owner authorized continuing with the documented manual assessment despite unavailable policy calibration. Push, PR creation, and review are now authorized; production activation is not.
 - A4 paused-for-HITL: merge, production activation, live account verification, and coordination with the old publisher. Complete the activation procedure in website-sync.md after approval.
 - A5 deferred-why: RSS --bandcamp discrepancy belongs to a separate repository and is outside this homepage implementation.
 
@@ -30,6 +30,6 @@ The LabelGrid release-list OpenAPI contract supports integer filter[is_live], fi
 
 GitHub workflow syntax passes actionlint 1.7.12. All 16 offline regression tests passed through the pre-push hook. Local structural review found no remaining critical defects after fixing embed-map lookup/rendering and API validation. No live API or production smoke test ran.
 
-The required policy checker reported: `policy: missing or unreadable escalation matrix: /Users/keybrdistt/.claude/skills/llm-autonomy-policy/escalation-matrix.plushrecs.md`. No Plush calibration was found in the Codex/Claude skill locations or shared skill source. This is an unavailable policy verdict, not a policy pass. Owner input is needed to provide the calibration or authorize proceeding with the documented manual assessment.
+The required policy checker reported: `policy: missing or unreadable escalation matrix: /Users/keybrdistt/.claude/skills/llm-autonomy-policy/escalation-matrix.plushrecs.md`. No Plush calibration was found in the Codex/Claude skill locations or shared skill source. This is an unavailable policy verdict, not a policy pass. The owner explicitly authorized continuing with this documented manual assessment. The policy verdict remains unavailable; no calibration files were changed.
 
 Manual risk assessment: this adds API-authenticated catalog generation and gated production publishing. PR checks have no deployment credentials. The shipped enable gate is off unless explicitly configured. No production effects occur from the local implementation. Activation still needs owner approval, live API verification, and publisher coordination. No changes were made to global policy files.
