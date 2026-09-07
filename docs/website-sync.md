@@ -31,7 +31,11 @@ It runs the offline regression suite. The same suite runs in the PR's Catalog ch
 
 ## Scheduled workflow and activation
 
-`.github/workflows/catalog-sync.yml` is **disabled unless** the repository variable `PLUSH_WEBSITE_SYNC_ENABLED` is exactly `true`. It only runs from `main`. Its daily schedule is 13:23 UTC (06:23 Denver daylight time, 07:23 standard time). GitHub schedules can be delayed and run from the default branch, as described in [GitHub's schedule documentation](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+Activated on 2026-09-07 for LabelGrid label 2. The first [production run](https://github.com/keybrdist-inc/plushrecs/actions/runs/34161867924) succeeded and the custom-domain catalog matched the validated 12-release preview. `PLUSH_WEBSITE_SYNC_ENABLED=true` is configured. The GitHub environment has no per-run approval requirement, so the daily schedule is unattended.
+
+The old Mac whole-site RSS publisher is disabled. The admin job retains its 10800-second schedule with `RunAtLoad=false`, and its refresh/Drive/admin steps remain in place. Website RSS updates are paused; the existing feed is still served. Do not reinstall the old publisher or re-enable its RSS gate without coordinating publication ownership.
+
+`.github/workflows/catalog-sync.yml` is **disabled unless** the repository variable `PLUSH_WEBSITE_SYNC_ENABLED` is exactly `true`. It only runs from `main`. Its daily schedule is 13:23 UTC (07:23 Denver daylight time, 06:23 standard time). GitHub schedules can be delayed and run from the default branch, as described in [GitHub's schedule documentation](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 
 An enabled scheduled run generates the catalog, tests it, saves a preview artifact, commits only `website/public/index.html` when changed, and uploads `website/public` to Cloudflare Pages project `plushrecs`, production branch `main`. A failed push or validation prevents deployment. A no-change run still deploys so a previous failed deployment can recover. No force push or automatic conflict resolution is used. The upload follows [Cloudflare's direct-upload CI procedure](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/).
 
