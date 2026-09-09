@@ -88,6 +88,7 @@ async function browser(initial) {
   const intervals = new Map();
   const timeouts = new Map();
   const elements = new Set();
+  const requests = [];
   let timerId = 0;
   class Image {
     classList = { add: () => { this.active = true; }, remove: () => { this.active = false; } };
@@ -97,10 +98,12 @@ async function browser(initial) {
   }
   const stage = { append: element => elements.add(element) };
   const context = vm.createContext({
-    Image, Intl, AbortSignal,
+    Image, Intl, AbortController, AbortSignal: {}, // Chromium 95 has no AbortSignal.timeout().
     Date: class extends Date { constructor() { super(now); } },
     document: { querySelector: () => stage },
-    fetch: async () => {
+    fetch: async (url, options) => {
+      requests.push({ url, signal: options.signal });
+      if (typeof feed === 'function') return feed(options.signal);
       if (feed instanceof Error) throw feed;
       return { ok: true, json: async () => ({ events: feed }) };
     },
@@ -113,6 +116,7 @@ async function browser(initial) {
   await settle();
   return {
     broken,
+    requests,
     active: () => [...elements].filter(e => e.active).map(e => e.alt),
     advance: value => { now = value; },
     rotate: () => { intervals.get(12000)(); },
@@ -121,8 +125,41 @@ async function browser(initial) {
       for (const [id, timer] of timeouts) if (timer.delay === 850) { timer.fn(); timeouts.delete(id); }
     },
     elementCount: () => elements.size,
+    pendingRequestTimers: () => [...timeouts.values()].filter(timer => timer.delay === 15000).length,
+    expireRequest: async () => {
+      for (const timer of timeouts.values()) if (timer.delay === 15000) timer.fn();
+      await settle();
+    },
   };
 }
+
+test('browser loads flyers without AbortSignal.timeout and clears the request timer', async () => {
+  const b = await browser([event(1)]);
+  assert.deepEqual(b.active(), ['Event 1']);
+  assert.equal(b.requests.length, 1);
+  assert.equal(b.requests[0].signal.aborted, false);
+  assert.equal(b.pendingRequestTimers(), 0);
+  await b.refresh(new Error('offline'));
+  assert.deepEqual(b.active(), ['Event 1']);
+  assert.equal(b.pendingRequestTimers(), 0);
+});
+
+test('a stalled request aborts and the next refresh can recover', async () => {
+  const b = await browser(signal => new Promise((_, reject) => {
+    signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true });
+  }));
+  assert.equal(b.requests.length, 1);
+  assert.equal(b.pendingRequestTimers(), 1);
+  await b.expireRequest();
+  assert.equal(b.requests[0].signal.aborted, true);
+  assert.equal(b.pendingRequestTimers(), 0);
+  assert.deepEqual(b.active(), []);
+  await b.refresh([event(1)]);
+  assert.deepEqual(b.active(), ['Event 1']);
+  assert.equal(b.requests.length, 2);
+  assert.equal(b.requests[1].signal.aborted, false);
+  assert.notEqual(b.requests[1].signal, b.requests[0].signal);
+});
 
 test('browser rotates uncached upcoming flyers and excludes past events in Denver', async () => {
   const b = await browser([event(0, '2026-09-11'), event(1), event(2, '2026-10-10')]);
