@@ -1,0 +1,8 @@
+{
+  "name": "plushrecs-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:events": "node --test tests/upcoming-events.test.mjs"
+  }
+}
