@@ -16,3 +16,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: python3 -m unittest discover -s tests -v
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - run: npm run test:events
+      - name: Build Pages functions
+        run: npx --yes wrangler@4.130.0 pages functions build --outdir /tmp/plush-pages-functions

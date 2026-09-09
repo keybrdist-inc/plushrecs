@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Recon upcoming events</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root { color-scheme: dark; background: #000; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #000; }
+    main { position: fixed; inset: 0; background: #000; }
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      opacity: 0;
+      transition: opacity 800ms ease-in-out;
+      pointer-events: none;
+      user-select: none;
+    }
+    img.active { opacity: 1; }
+    @media (prefers-reduced-motion: reduce) { img { transition: none; } }
+  </style>
+</head>
+<body>
+  <main aria-label="Upcoming Recon events"></main>
+  <script type="module" src="/upcoming-events.js"></script>
+</body>
+</html>

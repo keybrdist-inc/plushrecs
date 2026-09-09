@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "include": ["/api/upcoming-events", "/api/upcoming-events/"],
+  "exclude": []
+}
