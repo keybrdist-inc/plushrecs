@@ -62,9 +62,11 @@ async function loadImage(event) {
 async function refresh() {
   if (refreshing) return;
   refreshing = true;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
   try {
     const response = await fetch('/api/upcoming-events', {
-      cache: 'no-cache', signal: AbortSignal.timeout(15000),
+      cache: 'no-cache', signal: controller.signal,
     });
     if (!response.ok) throw new Error('Event feed unavailable');
     const body = await response.json();
@@ -75,6 +77,7 @@ async function refresh() {
   } catch {
     // OBS stays on valid, loaded flyers during a temporary feed failure.
   } finally {
+    clearTimeout(timeout);
     refreshing = false;
     const available = upcoming();
     if (!available.includes(current)) show(available[0]);
