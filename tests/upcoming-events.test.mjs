@@ -81,7 +81,7 @@ test('API fixes the upstream owner, denies writes, and does not leak failure det
 const clientSource = await readFile(new URL('../website/public/upcoming-events.js', import.meta.url), 'utf8');
 const event = (id, date = '2026-09-12') => ({ id, date, title: `Event ${id}`, image: `https://example.com/${id}.jpg` });
 
-async function browser(initial) {
+async function browser(initial, search = '') {
   let now = '2026-09-13T05:59:59Z'; // Still September 12 in Denver.
   let feed = initial;
   const broken = new Set();
@@ -90,6 +90,7 @@ async function browser(initial) {
   const elements = new Set();
   const requests = [];
   let timerId = 0;
+  let elapsed = 0;
   class Image {
     classList = { add: () => { this.active = true; }, remove: () => { this.active = false; } };
     decode() { return broken.has(this.src) ? Promise.reject(new Error('broken image')) : Promise.resolve(); }
@@ -99,6 +100,7 @@ async function browser(initial) {
   const stage = { append: element => elements.add(element) };
   const context = vm.createContext({
     Image, Intl, AbortController, AbortSignal: {}, // Chromium 95 has no AbortSignal.timeout().
+    URLSearchParams, window: { location: { search } },
     Date: class extends Date { constructor() { super(now); } },
     document: { querySelector: () => stage },
     fetch: async (url, options) => {
@@ -107,7 +109,7 @@ async function browser(initial) {
       if (feed instanceof Error) throw feed;
       return { ok: true, json: async () => ({ events: feed }) };
     },
-    setInterval: (fn, delay) => { intervals.set(delay, fn); },
+    setInterval: (fn, delay) => { intervals.set(fn.name, { fn, delay, next: elapsed + delay }); },
     setTimeout: (fn, delay) => { const id = ++timerId; timeouts.set(id, { fn, delay }); return id; },
     clearTimeout: id => timeouts.delete(id),
   });
@@ -119,8 +121,20 @@ async function browser(initial) {
     requests,
     active: () => [...elements].filter(e => e.active).map(e => e.alt),
     advance: value => { now = value; },
-    rotate: () => { intervals.get(12000)(); },
-    refresh: async value => { feed = value; await intervals.get(300000)(); await settle(); },
+    rotate: () => { intervals.get('rotate').fn(); },
+    refresh: async value => { feed = value; await intervals.get('refresh').fn(); await settle(); },
+    tick: async duration => {
+      const end = elapsed + duration;
+      while (true) {
+        const next = [...intervals.values()].sort((a, b) => a.next - b.next)[0];
+        if (next.next > end) break;
+        elapsed = next.next;
+        next.next += next.delay;
+        next.fn();
+        await settle();
+      }
+      elapsed = end;
+    },
     finishFade: () => {
       for (const [id, timer] of timeouts) if (timer.delay === 850) { timer.fn(); timeouts.delete(id); }
     },
@@ -132,6 +146,75 @@ async function browser(initial) {
     },
   };
 }
+
+test('default rotation holds each flyer for 180 seconds', async () => {
+  const b = await browser([event(1), event(2)]);
+  await b.tick(179999);
+  assert.deepEqual(b.active(), ['Event 1']);
+  await b.tick(1);
+  assert.deepEqual(b.active(), ['Event 2']);
+  await b.tick(180000);
+  assert.deepEqual(b.active(), ['Event 1']);
+});
+
+test('timer query overrides rotation without changing the five-minute feed refresh', async () => {
+  const b = await browser([event(1), event(2)], '?timer=60');
+  await b.tick(59999);
+  assert.deepEqual(b.active(), ['Event 1']);
+  await b.tick(1);
+  assert.deepEqual(b.active(), ['Event 2']);
+  assert.equal(b.requests.length, 1);
+  await b.tick(240000);
+  assert.equal(b.requests.length, 2);
+  assert.deepEqual(b.active(), ['Event 2']);
+  const sameInterval = await browser([event(1), event(2)], '?timer=300');
+  await sameInterval.tick(300000);
+  assert.deepEqual(sameInterval.active(), ['Event 2']);
+  assert.equal(sameInterval.requests.length, 2);
+});
+
+test('invalid timer values safely fall back to 180 seconds', async () => {
+  for (const timer of ['', '0', '-1', '0.5', '180oops', 'NaN', 'Infinity', '2147484', '999999999999999999999']) {
+    const b = await browser([event(1), event(2)], `?timer=${timer}`);
+    await b.tick(179999);
+    assert.deepEqual(b.active(), ['Event 1'], `timer=${timer}`);
+    await b.tick(1);
+    assert.deepEqual(b.active(), ['Event 2'], `timer=${timer}`);
+  }
+});
+
+test('id pins the actual campaign rather than its position in the feed', async () => {
+  const b = await browser([event(24019), event(24044)], '?id=24044&timer=1');
+  assert.deepEqual(b.active(), ['Event 24044']);
+  await b.tick(300000);
+  assert.deepEqual(b.active(), ['Event 24044']);
+  assert.equal(b.requests.length, 2);
+  await b.refresh([{ ...event(24044), title: 'Updated flyer' }, event(24019)]);
+  assert.deepEqual(b.active(), ['Updated flyer']);
+});
+
+test('pinned flyers remain eligible after their date and through temporary feed failures', async () => {
+  const b = await browser([event(1, '2026-09-11'), event(2)], '?id=1');
+  assert.deepEqual(b.active(), ['Event 1']);
+  b.advance('2026-09-14T06:00:00Z');
+  b.rotate();
+  await b.refresh(new Error('offline'));
+  assert.deepEqual(b.active(), ['Event 1']);
+  await b.refresh([event(2)]);
+  assert.deepEqual(b.active(), []);
+});
+
+test('unknown or invalid ids stay black instead of showing an unrelated flyer', async () => {
+  for (const id of ['1', '', '0', '-1', '24019oops', '1.5', '999999999999999999999']) {
+    const b = await browser([event(24019)], `?id=${id}`);
+    assert.deepEqual(b.active(), [], `id=${id}`);
+    b.rotate();
+    assert.deepEqual(b.active(), [], `id=${id}`);
+  }
+  const b = await browser([event(24019)], '?id=24044');
+  await b.refresh([event(24019), event(24044)]);
+  assert.deepEqual(b.active(), ['Event 24044']);
+});
 
 test('browser loads flyers without AbortSignal.timeout and clears the request timer', async () => {
   const b = await browser([event(1)]);

@@ -3,18 +3,32 @@
 Use `https://about.plushrecs.com/upcoming-events` as an OBS Browser Source.
 Set 1080 × 1080 for a square flyer or 1920 × 1080 for black side bars.
 The full flyer is centered without cropping. There is no navigation link,
-text overlay, audio, or visible control. Flyers crossfade every 12 seconds
+text overlay, audio, or visible control. Flyers crossfade every 180 seconds
 over 800ms. Reduced-motion mode switches directly.
+
+Query options:
+
+- `?timer=180` sets seconds between flyers. Use a positive whole number within
+  the browser timer limit (1–2147483 seconds). Missing or invalid values use 180.
+- `?id=24019` pins the PHACE flyer. IDs are the actual Recon campaign IDs from
+  event page URLs, not positions in the list. The anniversary flyer is `24044`.
+- `?id=24044&timer=180` keeps the anniversary flyer pinned; a single selected
+  item does not cycle. Feed refreshes still pick up artwork changes.
+
+A pinned event remains visible after its date while present in the feed.
+An unknown or invalid ID shows black, with no fallback to an unrelated event.
+Remove `id` to return to upcoming-event rotation.
 
 The page refreshes every five minutes from `/api/upcoming-events`, a Pages
 Function that reads the same public Promoly campaign feed as recondnb.net,
 with the owner fixed to 6079. No credentials are required or returned.
-Upstream requests are cached for five minutes. The page includes events dated
+Upstream requests are cached for five minutes. Without `id`, the page includes events dated
 today or later in America/Denver, matching Recon's homepage date rule, sorted
 soonest first. Past events expire while OBS stays open, including when offline.
-An event's flyer stops displaying at midnight after its advertised date.
+An unpinned event's flyer expires after its advertised date, on the next
+rotation or feed refresh.
 
-The client retains loaded, still-upcoming flyers on feed failures, skips broken
+The client retains loaded, eligible flyers on feed failures, skips broken
 images, retries on the next refresh, and shows black when no events remain.
 The API returns only public flyer metadata. Pagination is bounded to ten pages
 and fails with 503 rather than publishing a partial list. Invalid individual

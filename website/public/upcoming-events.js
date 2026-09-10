@@ -1,4 +1,11 @@
 const stage = document.querySelector('main');
+const params = new URLSearchParams(window.location.search);
+const timer = params.get('timer');
+const seconds = /^\d+$/.test(timer || '') ? Number(timer) : NaN;
+const interval = Number.isSafeInteger(seconds) && seconds >= 1 && seconds <= 2147483
+  ? seconds * 1000 : 180000;
+const id = params.get('id');
+const selectedId = id === null ? null : (/^\d+$/.test(id) ? Number(id) : NaN);
 const denverDate = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'America/Denver', year: 'numeric', month: '2-digit', day: '2-digit',
 });
@@ -6,9 +13,13 @@ let events = [];
 let current = null;
 let refreshing = false;
 
-function upcoming() {
+function eligibleEvents(items = events) {
+  if (selectedId !== null) {
+    return Number.isSafeInteger(selectedId) && selectedId > 0
+      ? items.filter(event => event.id === selectedId) : [];
+  }
   const today = denverDate.format(new Date());
-  return events.filter(event => event.date >= today);
+  return items.filter(event => event.date >= today);
 }
 
 function show(event) {
@@ -30,7 +41,7 @@ function show(event) {
 }
 
 function rotate() {
-  const available = upcoming();
+  const available = eligibleEvents();
   const index = available.indexOf(current);
   show(available[(index + 1) % available.length]);
 }
@@ -71,19 +82,18 @@ async function refresh() {
     if (!response.ok) throw new Error('Event feed unavailable');
     const body = await response.json();
     if (!Array.isArray(body.events)) throw new Error('Invalid event feed');
-    const today = denverDate.format(new Date());
-    const next = body.events.filter(event => event.date >= today);
+    const next = eligibleEvents(body.events);
     events = (await Promise.all(next.map(loadImage))).filter(Boolean);
   } catch {
     // OBS stays on valid, loaded flyers during a temporary feed failure.
   } finally {
     clearTimeout(timeout);
     refreshing = false;
-    const available = upcoming();
+    const available = eligibleEvents();
     if (!available.includes(current)) show(available[0]);
   }
 }
 
 void refresh();
-setInterval(rotate, 12000);
+setInterval(rotate, interval);
 setInterval(refresh, 5 * 60 * 1000);
