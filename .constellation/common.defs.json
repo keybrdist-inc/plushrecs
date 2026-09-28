@@ -80,11 +80,29 @@
       "additionalProperties": false,
       "properties": {
         "provider": {
-          "enum": ["coderabbit", "greptile", "kody", "none", "unknown"]
+          "enum": ["greptile", "none", "unknown"],
+          "description": "External review-provider integration. Native fleet review is declared separately in review.native."
+        },
+        "native": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["engine", "mode"],
+          "description": "Declared native fleet reviewer. Authoritative mode closes automated review only for complete current-head evidence; CI, human threads, approval, merge, and deployment remain separate.",
+          "properties": {
+            "engine": {"const": "codex"},
+            "mode": {"enum": ["advisory", "authoritative"]}
+          }
         },
         "config_verified": {
           "type": "boolean",
           "description": "actual repo review-bot config checked (lgapi lesson: CHILL profile voids assumptions)"
+        },
+        "loop_branch_writes": {
+          "enum": [
+            "allowed",
+            "forbidden"
+          ],
+          "description": "Whether the scheduled review loop may push to PR branches. forbidden = reviewer-only: findings are held for the PR author to fix (branch-write-forbidden) instead of raised as an operator decision. Absent means allowed."
         }
       }
     },
@@ -164,7 +182,7 @@
       }
     },
     "loop_kind": {
-      "enum": ["watch", "fix", "groom", "reconcile", "review", "debt-ratchet", "source", "discover", "roadmap", "calibrate", "research", "meta"]
+      "enum": ["watch", "fix", "groom", "reconcile", "review", "debt-ratchet", "source", "discover", "roadmap", "calibrate", "research", "code-comments", "meta"]
     },
     "loops": {
       "type": "array",
@@ -195,6 +213,7 @@
         "preset-social-publish",
         "preset-writing-draft",
         "mon-research",
+        "mon-code-comments",
         "preset-support-triage",
         "mon-fastlane-lgapi",
         "mon-groom",
@@ -206,11 +225,70 @@
         "mon-cost-analysis",
         "mon-pr-lifecycle",
         "mon-dashboard-watch",
-    "mon-worktree-sweep"
+        "mon-worktree-sweep",
+        "mon-review-remediation",
+        "sandbox-coding",
+        "sandbox-review"
       ]
     },
+    "routing_work_class": {
+      "enum": ["routine", "review", "coding", "escalation"]
+    },
+    "routing_pool_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "routing_skill_assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "pool"],
+      "properties": {
+        "class": { "$ref": "#/$defs/routing_work_class" },
+        "pool": { "$ref": "#/$defs/routing_pool_id" }
+      }
+    },
     "routing_model": {
-      "enum": ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"]
+      "enum": [
+        "gpt-6-sol",
+        "gpt-6-astra",
+        "claude-opus-5-5",
+        "openrouter/z-ai/glm-5.3-flash",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+        "openrouter/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "routing_recorded_model": {
+      "$comment": "Recorded-only superset of routing_model. Retired ids (ox-alpha; the GPT-5.6 family, D235) stay so receipts, usage rows, rate cards, and qualification evidence already written keep validating; nothing may command them.",
+      "enum": [
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-5.6-luna",
+        "gpt-6-sol",
+        "gpt-6-astra",
+        "claude-opus-5-5",
+        "openrouter/stealth/ox-alpha",
+        "openrouter/z-ai/glm-5.3-flash",
+        "openrouter/openai/gpt-5.6-sol",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+        "openrouter/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "routing_safe_mode_tuple": {
+      "$comment": "The first value is the current safe route (D235). The second is the retired pre-D235 safe route, accepted only on records already written.",
+      "enum": [
+        { "model": "gpt-6-sol", "reasoning_effort": "high", "service_tier": "standard" },
+        { "model": "gpt-5.6-sol", "reasoning_effort": "high", "service_tier": "standard" }
+      ]
+    },
+    "routing_recorded_tuple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "reasoning_effort", "service_tier"],
+      "properties": {
+        "model": { "$ref": "#/$defs/routing_recorded_model" },
+        "reasoning_effort": { "$ref": "#/$defs/routing_reasoning_effort" },
+        "service_tier": { "$ref": "#/$defs/routing_service_tier" }
+      }
     },
     "routing_reasoning_effort": {
       "enum": ["low", "medium", "high"]
@@ -226,6 +304,39 @@
         "model": { "$ref": "#/$defs/routing_model" },
         "reasoning_effort": { "$ref": "#/$defs/routing_reasoning_effort" },
         "service_tier": { "$ref": "#/$defs/routing_service_tier" }
+      }
+    },
+    "routing_pool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "reasoning_effort", "service_tier"],
+      "description": "A named registry pool: one routing tuple plus an optional ordered list of whole fallback routes. Fallbacks apply only when the route resolves from this pool (fleet default or attended class overlay); each fallback model must differ from the pool model (checked semantically). Project llm overrides stay plain routing tuples and never carry fallbacks.",
+      "properties": {
+        "model": { "$ref": "#/$defs/routing_model" },
+        "reasoning_effort": { "$ref": "#/$defs/routing_reasoning_effort" },
+        "service_tier": { "$ref": "#/$defs/routing_service_tier" },
+        "fallbacks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/routing_tuple" }
+        }
+      }
+    },
+    "routing_recorded_fallback_route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "reasoning_effort", "service_tier", "rate_card_id"],
+      "description": "One receipt-authorized fallback route: a whole recorded tuple plus the rate card it binds.",
+      "properties": {
+        "model": { "$ref": "#/$defs/routing_recorded_model" },
+        "reasoning_effort": { "$ref": "#/$defs/routing_reasoning_effort" },
+        "service_tier": { "$ref": "#/$defs/routing_service_tier" },
+        "rate_card_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+        }
       }
     },
     "sha256": {
@@ -271,13 +382,16 @@
           "hetzner",
           "e2b",
           "anthropic",
+          "openrouter",
           "openai",
           "stripe",
           "slack",
           "buildkite",
           "doppler",
           "convex",
-          "first-party-api"
+          "first-party-api",
+          "bitbucket-orchestrator",
+          "typesafe"
         ]
       },
       "patternProperties": {
